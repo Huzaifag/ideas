@@ -27,4 +27,19 @@ class IdeaController extends Controller
     public function show(Idea $idea){
         return view('idea.show', compact('idea'));
     }
+
+    public function edit(Idea $idea){
+        $editing = true;
+        return view('idea.show', compact('idea', 'editing'));
+    }
+    public function update(Idea $idea){
+        //dump(request()->get("content"));
+        request()->validate([
+            'content' => 'required|min:3|max:255',
+        ]);
+        $idea->content = request()->get('content');
+        $idea->save();
+
+       return redirect(route('home'))->with('success', 'Idea updated Successfully');
+    }
 }

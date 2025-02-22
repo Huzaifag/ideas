@@ -21,4 +21,6 @@ Route::get('/profile', [ProfileController::class , 'index']);
 
 Route::post('/ideas', [IdeaController::class, 'store'])->name('ideas.store');
 Route::get('/ideas/{idea}', [IdeaController::class, 'show'])->name('ideas.show');
+Route::get('/ideas/{idea}/edit', [IdeaController::class, 'edit'])->name('ideas.edit');
 Route::delete('/ideas/{id}', [IdeaController::class, 'destroy'])->name('ideas.destroy');
+Route::put('/ideas/{id}', [IdeaController::class, 'update'])->name('ideas.update');

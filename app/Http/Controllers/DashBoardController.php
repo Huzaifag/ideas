@@ -8,7 +8,10 @@ use Illuminate\Http\Request;
 class DashBoardController extends Controller
 {
     public function index(){
-
-        return view('welcome', ['ideas' => Idea::orderBy('created_at', 'desc')->paginate(5)]);
+        $ideas = Idea::orderBy('created_at', 'desc');
+        if (request()->has('search')) {
+            $ideas = Idea::where('content', 'LIKE', '%' . request()->get('search') . '%')->orderBy('created_at','desc');
+        }
+        return view('welcome', ['ideas' => $ideas->paginate(5)]);
     }
 }

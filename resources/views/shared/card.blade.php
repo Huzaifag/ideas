@@ -13,7 +13,7 @@
                 @csrf
                 @method('DELETE')
                 <a class="btn btn-sm btn-info" href="{{route('ideas.show', $idea->id)}}"> <i class="fa fa-eye"></i></a>
-
+                <a class="btn btn-sm btn-primary" href="{{route('ideas.edit', $idea->id)}}"> <i class="fa-solid fa-pen-to-square"></i></a>
                 <button class="btn btn-sm btn-danger" onclick="
                         confirm('Are you sure?') || event.stopImmediatePropagation()
                     " type="submit">
@@ -23,9 +23,27 @@
         </div>
     </div>
     <div class="card-body">
+        @if ($editing ?? false)
+        <div class="row">
+            <form action="{{route('ideas.update', $idea->id)}}" method="post">
+                @csrf
+                @method('PUT')
+                <div class="mb-3">
+                    <textarea class="form-control" name="content" id="idea" rows="3">{{$idea->content}}</textarea>
+                    @error('content')
+                        <span class="d-block text-danger fs-6 mt-2">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="">
+                    <button type="submit" class="btn btn-dark"> Update </button>
+                </div>
+            </form>
+        </div>
+        @else
         <p class="fs-6 fw-light text-muted">
             {{ $idea->content }}
         </p>
+        @endif
         <div class="d-flex justify-content-between">
             <div>
                 <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-heart me-1">

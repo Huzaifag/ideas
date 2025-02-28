@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -19,6 +20,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'image',
+        'bio',
         'email',
         'password',
     ];
@@ -44,5 +47,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function ideas(): HasMany{
+       return $this->hasMany(Idea::class);
+    }
+
+    public function comments(): HasMany{
+        return $this->hasMany(Comment::class);
+     }
+
+    public function getImageURL(){
+        if($this->image){
+            return asset('storage/' . $this->image);
+        }else{
+            return asset("https://api.dicebear.com/6.x/fun-emoji/svg?seed={ $this->name }");
+        }
     }
 }

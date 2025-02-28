@@ -13,6 +13,7 @@ class IdeaController extends Controller
             'content' => 'required|min:3|max:255',
         ]);
         $idea = Idea::create([
+            'user_id' => auth()->id(),
             'content' => request()->get('content', 'No content'),
         ]);
 
@@ -20,6 +21,10 @@ class IdeaController extends Controller
     }
 
     public function destroy($id){
+        $idea = Idea::findOrFail($id);
+        if($idea->user_id != auth()->id()){
+            abort(404);
+        }
         Idea::where('id', $id)->firstOrFail()->delete();
         return redirect(route('home'))->with('success', 'Idea deleted Successfully');
     }
@@ -29,6 +34,9 @@ class IdeaController extends Controller
     }
 
     public function edit(Idea $idea){
+        if($idea->user_id !== auth()->id()){
+           abort(404);
+        }
         $editing = true;
         return view('idea.show', compact('idea', 'editing'));
     }

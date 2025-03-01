@@ -16,9 +16,14 @@
         </div>
         <div class="px-2 mt-4">
             <h5 class="fs-5"> About : </h5>
-            <p class="fs-6 fw-light">
-                {{ $user->bio }}
-            </p>
+            <figure class="text-center">
+                <blockquote class="blockquote">
+                  <p class="mb-0">{{$user->bio}}</p>
+                </blockquote>
+                <figcaption class="blockquote-footer">
+                  <cite title="Source Title"> {{ $user->name }} </cite>
+                </figcaption>
+              </figure>
             <div class="d-flex justify-content-start">
                 <a href="#" class="fw-light nav-link fs-6 me-3"> <span class="fas fa-user me-1">
                     </span> 120 Followers </a>
@@ -28,9 +33,21 @@
                     </span> {{$user->comments->count()}} </a>
             </div>
             @if ($user->id !== auth()->user()->id)
-            <div class="mt-3">
-                <button class="btn btn-primary btn-sm"> Follow </button>
-            </div>
+            @if (Auth::user()->follows($user))
+            <form action="{{route('users.unfollow', $user)}}" method="post">
+                @csrf
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-danger btn-sm"> Unfollow </button>
+                </div>
+            </form>
+            @else
+            <form action="{{route('users.follow', $user)}}" method="post">
+                @csrf
+                <div class="mt-3">
+                    <button type="submit" class="btn btn-primary btn-sm"> Follow </button>
+                </div>
+            </form>
+            @endif
             @endif
         </div>
     </div>

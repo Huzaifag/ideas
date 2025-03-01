@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashBoardController;
+use App\Http\Controllers\FollowUserController;
 use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -33,6 +34,10 @@ Route::post('/ideas/{idea}/comment', [CommentController::class, 'store'])->name(
 
 Route::resource('users', UserController::class)->only(['show','edit','update'])->middleware('auth');
 
+//Follow & Unfollow
+
+Route::post('/users/{user}/follow',[FollowUserController::class, 'follow'])->name('users.follow')->middleware('auth');
+Route::post('/users/{user}/unfollow',[FollowUserController::class, 'unfollow'])->name('users.unfollow')->middleware('auth');
 //Authentication
 
 Route::get('/register', [AuthController::class , 'register'])->name('register');

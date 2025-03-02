@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Idea extends Model
 {
+
+    protected $with = ['user:id,name,image', 'comments.user:id,name,image'];
     protected $fillable = [
         'user_id',
         'content',

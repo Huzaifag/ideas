@@ -35,8 +35,11 @@ Route::post('/ideas/{idea}/comment', [CommentController::class, 'store'])->name(
 Route::resource('users', UserController::class)->only(['show','edit','update'])->middleware('auth');
 
 //Follow & Unfollow
-
 Route::post('/users/{user}/follow',[FollowUserController::class, 'follow'])->name('users.follow')->middleware('auth');
+Route::post('/users/{user}/unfollow',[FollowUserController::class, 'unfollow'])->name('users.unfollow')->middleware('auth');
+
+//like & unlike
+Route::post('/ideas/{idea}/like',[FollowUserController::class, 'like'])->name('ideas.like')->middleware('auth');
 Route::post('/users/{user}/unfollow',[FollowUserController::class, 'unfollow'])->name('users.unfollow')->middleware('auth');
 //Authentication
 

@@ -8,6 +8,7 @@ use App\Http\Controllers\IdeaController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LikesController;
 
 Route::get('/', [DashBoardController::class, 'index'])->name('home');
 
@@ -39,8 +40,8 @@ Route::post('/users/{user}/follow',[FollowUserController::class, 'follow'])->nam
 Route::post('/users/{user}/unfollow',[FollowUserController::class, 'unfollow'])->name('users.unfollow')->middleware('auth');
 
 //like & unlike
-Route::post('/ideas/{idea}/like',[FollowUserController::class, 'like'])->name('ideas.like')->middleware('auth');
-Route::post('/users/{user}/unfollow',[FollowUserController::class, 'unfollow'])->name('users.unfollow')->middleware('auth');
+Route::post('/ideas/{idea}/like',[LikesController::class, 'like'])->name('ideas.like')->middleware('auth');
+Route::post('/ideas/{idea}/unlike',[LikesController::class, 'unlike'])->name('ideas.unlike')->middleware('auth');
 //Authentication
 
 Route::get('/register', [AuthController::class , 'register'])->name('register');

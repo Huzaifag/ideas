@@ -4,7 +4,7 @@
   @csrf
   <div>
     <button type="submit" class="fw-light nav-link fs-6"> <span class="fas fa-heart me-1">
-        </span> {{ $idea->likes()->count() }}
+        </span> {{ $idea->likes_count }}
     </button>
   </div>
 </form>
@@ -13,7 +13,7 @@
   @csrf
   <div>
     <button type="submit" class="fw-light nav-link fs-6"> <span class="far fa-heart me-1">
-        </span> {{ $idea->likes()->count() }}
+        </span> {{ $idea->likes_count }}
     </button>
   </div>
 </form>
@@ -22,7 +22,7 @@
 @guest
 <div>
   <a href="{{route('login')}}" class="fw-light nav-link fs-6"> <span class="far fa-heart me-1">
-      </span> {{ $idea->likes()->count() }}
+      </span> {{ $idea->likes_count }}
   </a>
 </div>
 @endguest

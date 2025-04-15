@@ -6,6 +6,8 @@ use App\Models\Idea;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Requests\UpdateUserRequest;
 
 class UserController extends Controller
 {
@@ -28,6 +30,7 @@ class UserController extends Controller
      */
     public function edit(string $id)
     {
+        Gate::authorize('update', User::findOrFail($id));
         $user = User::findOrFail($id);
         return view('users.edit', compact('user'));
     }
@@ -35,18 +38,17 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
-        $validated = request()->validate([
-            'name' => 'required|min:3|max:255',
-            'bio' => 'nullable|min:5|max:255',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        $this->authorize('update', User::findOrFail($id));
+        $validated = $request->validated();
         $user = User::findOrFail($id);
-        if(request()->hasFile('image')){
+        if($request->hasFile('image')){
             $imagePath = request('image')->store('profile', 'public');
             $validated['image'] = $imagePath;
-            Storage::disk('public')->delete($user->image);
+            if($user->image){
+                Storage::disk('public')->delete($user->image);
+            }
         }
 
         User::updateOrCreate(['id' => $id], $validated);

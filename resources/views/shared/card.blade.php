@@ -14,14 +14,14 @@
                 @method('DELETE')
                 <a class="btn btn-sm btn-info" href="{{route('ideas.show', $idea->id)}}"> <i class="fa fa-eye"></i></a>
                 @auth
-                @if (auth()->user()->id === $idea->user_id)
+                @can('delete.idea', $idea)
                 <a class="btn btn-sm btn-primary" href="{{route('ideas.edit', $idea->id)}}"> <i class="fa-solid fa-pen-to-square"></i></a>
                 <button class="btn btn-sm btn-danger" onclick="
                         confirm('Are you sure?') || event.stopImmediatePropagation()
                     " type="submit">
                     <i class="fa-solid fa-trash"></i>
                 </button>
-                @endif
+                @endcan
                 @endauth
             </form>
         </div>
@@ -33,7 +33,7 @@
                 @csrf
                 @method('PUT')
                 <div class="mb-3">
-                    <textarea class="form-control" name="content" id="idea" rows="3">{{$idea->content}}</textarea>
+                    <textarea class="form-control urdu" name="content" id="idea" rows="3">{{$idea->content}}</textarea>
                     @error('content')
                         <span class="d-block text-danger fs-6 mt-2">{{ $message }}</span>
                     @enderror
@@ -44,7 +44,7 @@
             </form>
         </div>
         @else
-        <p class="fs-6 fw-light text-muted">
+        <p class="fs-6 fw-light text-muted urdu">
             {{ $idea->content }}
         </p>
         @endif
@@ -52,7 +52,7 @@
             @include('shared.likes')
             <div>
                 <span class="fs-6 fw-light text-muted"> <span class="fas fa-clock"> </span>
-                    3-5-2023 </span>
+                    {{$idea->created_at->diffForHumans()}} </span>
             </div>
         </div>
        @include('shared.comment-box')

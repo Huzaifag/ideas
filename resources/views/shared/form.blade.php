@@ -1,5 +1,5 @@
 @auth
-<h4> Share yours ideas </h4>
+<h4 class="urdu my-4"> {{__('ideas.form_heading')}} </h4>
 <div class="row">
     <form action="{{route('ideas.store')}}" method="post">
         @csrf

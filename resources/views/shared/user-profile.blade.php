@@ -10,9 +10,11 @@
                     <span class="fs-6 text-muted">{{ $user->email }}</span>
                 </div>
             </div>
+            @can('update', $user)
             <div>
                 <a class="btn btn-sm btn-primary" href="{{route('users.edit', $user->id)}}"> <i class="fa-solid fa-pen-to-square"></i></a>
             </div>
+            @endcan
         </div>
         <div class="px-2 mt-4">
             <h5 class="fs-5"> About : </h5>
@@ -32,7 +34,7 @@
                 <a href="#" class="fw-light nav-link fs-6"> <span class="fas fa-comment me-1">
                     </span> {{$user->comments->count()}} </a>
             </div>
-            @if ($user->id !== auth()->user()->id)
+            @if ($user->isNot(Auth::user()))
             @if (Auth::user()->follows($user))
             <form action="{{route('users.unfollow', $user)}}" method="post">
                 @csrf

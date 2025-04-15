@@ -9,13 +9,22 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LikesController;
+use App\Http\Controllers\FeedController;
+use App\Http\Controllers\AdminDashboardController;
+use Illuminate\Support\Facades\Gate;
+
+Route::middleware(['setLocal'])->group(function () {
+Route::get('lang/{lang}', function($lang){
+    session()->put('lang', $lang);
+    return redirect()->route('home');
+})->name('switch.lang');
 
 Route::get('/', [DashBoardController::class, 'index'])->name('home');
 
 
 //feed
 
-Route::get('/feed', [ProfileController::class , 'index']);
+Route::get('/feed', FeedController::class)->middleware('auth')->name('feed');
 
 
 //Profile
@@ -44,12 +53,29 @@ Route::post('/ideas/{idea}/like',[LikesController::class, 'like'])->name('ideas.
 Route::post('/ideas/{idea}/unlike',[LikesController::class, 'unlike'])->name('ideas.unlike')->middleware('auth');
 //Authentication
 
-Route::get('/register', [AuthController::class , 'register'])->name('register');
+Route::group(['middleware' => 'guest'], function(){
+    Route::get('/register', [AuthController::class , 'register'])->name('register');
+    Route::get('/login', [AuthController::class , 'login'])->name('login');
+    Route::post('/login', [AuthController::class , 'authenticate'])->name('login.authenticate');
+    Route::post('/register', [AuthController::class , 'store'])->name('register.store');
+});
 
-Route::post('/register', [AuthController::class , 'store'])->name('register.store');
+Route::post('/logout', [AuthController::class , 'logout'])->middleware('auth')->name('logout');
 
-Route::get('/login', [AuthController::class , 'login'])->name('login');
 
-Route::post('/login', [AuthController::class , 'authenticate'])->name('login.authenticate');
+Route::get('/admin', [AdminDashboardController::class, 'index'])->name('admin.dashboard')->middleware(['auth', 'admin']);
 
-Route::post('/logout', [AuthController::class , 'logout'])->name('logout');
+Route::get('checksGate', function(){
+  // if(!Gate::allows('admin')){
+  //   abort(403);
+  // }
+
+  // if(Gate::denies('admin')){
+  //   abort(403);
+  // }
+
+Gate::authorize('admin');
+
+  return('Hello');
+});
+});
